@@ -1,0 +1,15 @@
+sagemath-giac-0.1.0 (2025-02-19)
+
+  * Initial release. With a few tweaks, this is the sage.libs.giac
+    module that was shipped with SageMath in the past.
+
+  * The doctests have been rewritten in pure python, so they can
+    be run without "sage -t".
+
+  * __init__.py has been split into gb.py (the groebner_basis
+    function) and context.py (the local_giacsettings decorator). This
+    is more for convenience than principle; __init__.py causes issues
+    when doctesting a meson-python project, and Sage is capable of
+    abstracting away the name changes.
+
+  * A dependency on gmpy2 has replaced sage.libs.gmp.
