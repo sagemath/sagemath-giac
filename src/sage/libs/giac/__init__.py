@@ -31,7 +31,7 @@ EXAMPLES::
 
 from sage.structure.proof.all import polynomial as proof_polynomial
 from sage.rings.polynomial.multi_polynomial_sequence import PolynomialSequence
-from .giac import giacsettings, libgiac
+from sage.libs.giac.giac import giacsettings, libgiac
 
 #  Remarks for doctests:
 #     1) The first time that the c++ library giac is loaded a message appears.
