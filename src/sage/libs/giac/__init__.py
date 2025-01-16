@@ -2,7 +2,7 @@
 Wrappers for Giac functions
 
 We provide a python function to compute and convert to sage a Groebner
-basis using the ``giacpy_sage`` module.
+basis.
 
 AUTHORS:
 
@@ -11,12 +11,20 @@ AUTHORS:
 
 EXAMPLES::
 
-    sage: from sage.libs.giac import groebner_basis as gb_giac # random
-    sage: P = PolynomialRing(QQ, 6, 'x')
-    sage: I = sage.rings.ideal.Cyclic(P)
-    sage: B = gb_giac(I.gens()) # random
-    sage: B
+Compute and verify a Groebner basis::
+
+    >>> from sage.libs.giac import groebner_basis as gb_giac
+    >>> from sage.rings.ideal import Cyclic as CyclicIdeal
+    >>> from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
+    >>> from sage.rings.rational_field import QQ
+    >>> P = PolynomialRing(QQ, 6, 'x')
+    >>> I = CyclicIdeal(P)
+    >>> B = gb_giac(I.gens())
+    >>> B
     Polynomial Sequence with 45 Polynomials in 6 Variables
+    >>> B.is_groebner()
+    True
+
 """
 
 # *****************************************************************************
@@ -33,17 +41,9 @@ from sage.structure.proof.all import polynomial as proof_polynomial
 from sage.rings.polynomial.multi_polynomial_sequence import PolynomialSequence
 from sage.libs.giac.giac import giacsettings, libgiac
 
-#  Remarks for doctests:
-#     1) The first time that the c++ library giac is loaded a message appears.
-#        This message is version and arch dependent.
-#     2) When proba_epsilon is too bad (>1e-6?) setting it to a better value
-#        will give an additional message like the following one:
-#       Restoring proba epsilon to 1e-6 from 1e-12
-#       (it looks like  in internal giac changes this also to not work with a too bad probability)
-
 
 class GiacSettingsDefaultContext:
-    """
+    r"""
     Context preserve libgiac settings.
     """
 
@@ -51,12 +51,13 @@ class GiacSettingsDefaultContext:
         """
         EXAMPLES::
 
-           sage: from sage.libs.giac import GiacSettingsDefaultContext
-           sage: from sage.libs.giac.giac import giacsettings
-           sage: giacsettings.proba_epsilon = 1e-16
-           sage: with GiacSettingsDefaultContext(): giacsettings.proba_epsilon = 1e-12
-           sage: giacsettings.proba_epsilon < 1e-14
+           >>> from sage.libs.giac import GiacSettingsDefaultContext
+           >>> from sage.libs.giac.giac import giacsettings
+           >>> giacsettings.proba_epsilon = 1e-16
+           >>> with GiacSettingsDefaultContext(): giacsettings.proba_epsilon = 1e-12
+           >>> giacsettings.proba_epsilon < 1e-14
            True
+
         """
         self.proba_epsilon = giacsettings.proba_epsilon
         self.threads = giacsettings.threads
@@ -67,11 +68,11 @@ class GiacSettingsDefaultContext:
         """
         EXAMPLES::
 
-           sage: from sage.libs.giac import GiacSettingsDefaultContext
-           sage: from sage.libs.giac.giac import giacsettings
-           sage: giacsettings.proba_epsilon = 1e-16
-           sage: with GiacSettingsDefaultContext(): giacsettings.proba_epsilon = 1e-30
-           sage: giacsettings.proba_epsilon < 1e-20
+           >>> from sage.libs.giac import GiacSettingsDefaultContext
+           >>> from sage.libs.giac.giac import giacsettings
+           >>> giacsettings.proba_epsilon = 1e-16
+           >>> with GiacSettingsDefaultContext(): giacsettings.proba_epsilon = 1e-30
+           >>> giacsettings.proba_epsilon < 1e-20
            False
         """
         # Restore the debug level first to not have messages at each modification
@@ -87,20 +88,20 @@ def local_giacsettings(func):
 
     EXAMPLES::
 
-        sage: def testf(a, b):
-        ....:    giacsettings.proba_epsilon = a/100
-        ....:    giacsettings.threads = b+2
-        ....:    return (giacsettings.proba_epsilon, giacsettings.threads)
+        >>> def testf(a, b):
+        ...     giacsettings.proba_epsilon = a/100
+        ...     giacsettings.threads = b+2
+        ...     return (giacsettings.proba_epsilon, giacsettings.threads)
 
-        sage: from sage.libs.giac.giac import giacsettings
-        sage: from sage.libs.giac import local_giacsettings
-        sage: gporig, gtorig = (giacsettings.proba_epsilon,giacsettings.threads)
-        sage: gp, gt = local_giacsettings(testf)(giacsettings.proba_epsilon,giacsettings.threads)
-        sage: gporig == giacsettings.proba_epsilon
+        >>> from sage.libs.giac.giac import giacsettings
+        >>> from sage.libs.giac import local_giacsettings
+        >>> gporig, gtorig = (giacsettings.proba_epsilon,giacsettings.threads)
+        >>> gp, gt = local_giacsettings(testf)(giacsettings.proba_epsilon,giacsettings.threads)
+        >>> gporig == giacsettings.proba_epsilon
         True
-        sage: gtorig == giacsettings.threads
+        >>> gtorig == giacsettings.threads
         True
-        sage: gp<gporig, gt-gtorig
+        >>> gp<gporig, gt-gtorig
         (True, 2)
     """
     from sage.misc.decorators import sage_wraps
@@ -129,7 +130,7 @@ def groebner_basis(gens, proba_epsilon=None, threads=None, prot=False,
     INPUT:
 
     - ``gens`` -- an ideal (or a list) of polynomials over a prime field
-      of characteristic 0 or `p<2^31`
+      of characteristic 0 or `p < 2^31`
 
     - ``proba_epsilon`` -- (default: ``None``) majoration of the probability
       of a wrong answer when probabilistic algorithms are allowed
@@ -163,108 +164,91 @@ def groebner_basis(gens, proba_epsilon=None, threads=None, prot=False,
 
     EXAMPLES::
 
-        sage: from sage.libs.giac import groebner_basis as gb_giac
-        sage: P = PolynomialRing(GF(previous_prime(2**31)), 6, 'x')
-        sage: I = sage.rings.ideal.Cyclic(P)
-        sage: B = gb_giac(I.gens())
-        ...
-        sage: B
+        >>> from sage.arith.misc import previous_prime
+        >>> from sage.libs.giac import groebner_basis as gb_giac
+        >>> from sage.rings.finite_rings.finite_field_constructor import GF
+        >>> from sage.rings.ideal import Cyclic as CyclicIdeal
+        >>> from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
+        >>> P = PolynomialRing(GF(previous_prime(2**31)), 6, 'x')
+        >>> I = CyclicIdeal(P)
+        >>> B = gb_giac(I.gens())
+        >>> B
         Polynomial Sequence with 45 Polynomials in 6 Variables
-        sage: B.is_groebner()
+        >>> B.is_groebner()
         True
 
     Elimination ideals can be computed by passing ``elim_variables``::
 
-        sage: P = PolynomialRing(GF(previous_prime(2**31)), 5, 'x')
-        sage: I = sage.rings.ideal.Cyclic(P)
-        sage: B = gb_giac(I.gens(), elim_variables=[P.gen(0), P.gen(2)])
-        ...
-        sage: B.is_groebner()
+        >>> from sage.libs.giac import groebner_basis as gb_giac
+        >>> P = PolynomialRing(GF(previous_prime(2**31)), 5, 'x')
+        >>> I = CyclicIdeal(P)
+        >>> B = gb_giac(I.gens(), elim_variables=[P.gen(0), P.gen(2)])
+        >>> B.is_groebner()
         True
-        sage: B.ideal() == I.elimination_ideal([P.gen(0), P.gen(2)])
-        True
-
-    Computations over QQ can benefit from
-
-    * a probabilistic lifting::
-
-        sage: P = PolynomialRing(QQ,5, 'x')
-        sage: I = ideal([P.random_element(3,7) for j in range(5)])
-        sage: B1 = gb_giac(I.gens(),1e-16) # long time (1s)
-        ...
-        sage: sage.structure.proof.all.polynomial(True)
-        sage: B2 = gb_giac(I.gens()) # long time (4s)
-        ...
-        sage: B1 == B2 # long time
-        True
-        sage: B1.is_groebner() # not tested, too long time (50s)
+        >>> B.ideal() == I.elimination_ideal([P.gen(0), P.gen(2)])
         True
 
-    * multi threaded operations::
+    Computations over QQ can benefit from a probabilistic lifting::
 
-        sage: P = PolynomialRing(QQ, 8, 'x')
-        sage: I = sage.rings.ideal.Cyclic(P)
+        >>> from sage.rings.rational_field import QQ
+        >>> from sage.rings.ideal import Ideal
+        >>> from sage.structure.proof.all import polynomial as proof_polynomial
+        >>> P = PolynomialRing(QQ, 5, 'x')
+        >>> I = Ideal([P.random_element(3,7) for j in range(5)])
+        >>> B1 = gb_giac(I.gens(),1e-16)
+        >>> proof_polynomial(True)
+        >>> B2 = gb_giac(I.gens())
+        >>> B1 == B2
+        True
+        >>> B1.is_groebner()
+        True
 
-    You can get detailed information by setting ``prot=True``
+    You can get detailed information by setting ``prot=True``, but
+    it won't appear in the doctest output because C libraries are
+    missed by python's doctest input/output redirection::
 
-    ::
-
-        sage: I = sage.rings.ideal.Katsura(P)
-        sage: gb_giac(I,prot=True)  # random, long time (3s)
-        9381383 begin computing basis modulo 535718473
-        9381501 begin new iteration zmod, number of pairs: 8, base size: 8
-        ...end, basis size 74 prime number 1
-        G=Vector [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,...
-        ...creating reconstruction #0
-        ...
-        ++++++++basis size 74
-        checking pairs for i=0, j=
-        checking pairs for i=1, j=2,6,12,17,19,24,29,34,39,42,43,48,56,61,64,69,
-        ...
-        checking pairs for i=72, j=73,
-        checking pairs for i=73, j=
-        Number of critical pairs to check 373
-        +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++...
-        Successful... check of 373 critical pairs
-        12380865 end final check
+        >>> from sage.rings.ideal import Katsura as KatsuraIdeal
+        >>> P = PolynomialRing(QQ, 8, 'x')
+        >>> I = KatsuraIdeal(P)
+        >>> B = gb_giac(I, prot=True)
+        >>> B
         Polynomial Sequence with 74 Polynomials in 8 Variables
-
 
     TESTS::
 
-        sage: from sage.libs.giac.giac import libgiac
-        sage: libgiac("x2:=22; x4:='whywouldyoudothis'")
+        >>> from sage.libs.giac.giac import libgiac
+        >>> libgiac("x2:=22; x4:='whywouldyoudothis'")
         22,whywouldyoudothis
-        sage: gb_giac(I)
+        >>> gb_giac(I)
         Traceback (most recent call last):
         ...
         ValueError: Variables names ['x2', 'x4'] conflict in giac. Change them or purge them from in giac with libgiac.purge('x2')
-        sage: libgiac.purge('x2'),libgiac.purge('x4')
+        >>> libgiac.purge('x2'),libgiac.purge('x4')
         (22, whywouldyoudothis)
-        sage: gb_giac(I) # long time (3s)
-        ...Polynomial Sequence with 74 Polynomials in 8 Variables
+        >>> gb_giac(I)
+        Polynomial Sequence with 74 Polynomials in 8 Variables
 
-        sage: I = ideal(P(0),P(0))
-        sage: I.groebner_basis() == gb_giac(I)
+        >>> I = Ideal(P(0),P(0))
+        >>> I.groebner_basis() == gb_giac(I)
         True
 
     Test the supported term orderings::
 
-        sage: from sage.rings.ideal import Cyclic
+        sage: from sage.rings.ideal import Cyclic as CyclicIdeal
         sage: P = PolynomialRing(QQ, 'x', 4, order='lex')
-        sage: B = gb_giac(Cyclic(P))
+        sage: B = gb_giac(CyclicIdeal(P))
         ...
-        sage: B.is_groebner(), B.ideal() == Cyclic(P)
+        sage: B.is_groebner(), B.ideal() == CyclicIdeal(P)
         (True, True)
         sage: P = P.change_ring(order='deglex')
-        sage: B = gb_giac(Cyclic(P))
+        sage: B = gb_giac(CyclicIdeal(P))
         ...
-        sage: B.is_groebner(), B.ideal() == Cyclic(P)
+        sage: B.is_groebner(), B.ideal() == CyclicIdeal(P)
         (True, True)
         sage: P = P.change_ring(order='degrevlex(2),degrevlex(2)')
-        sage: B = gb_giac(Cyclic(P))
+        sage: B = gb_giac(CyclicIdeal(P))
         ...
-        sage: B.is_groebner(), B.ideal() == Cyclic(P)
+        sage: B.is_groebner(), B.ideal() == CyclicIdeal(P)
         (True, True)
     """
     try:
