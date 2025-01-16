@@ -1240,14 +1240,17 @@ cdef class Pygen(GiacMethods_base):
             [[1,2]]
 
         """
-        d=self.dim()
-        if d.type()==7:
-            if(a>d[0] and b>=d[1]):
-                A=self.semi_augment(Pygen((a-d[0],d[1])).matrix())
-                if(b>d[1]):
-                    A=A.augment(Pygen((a,b-d[1])).matrix())
+        d = self.dim()
+        if d.type() == 7:
+            if(a > d[0] and b >= d[1]):
+                a = Pygen(a)
+                A = self.semi_augment(Pygen((a-d[0],d[1])).matrix())
+                if(b > d[1]):
+                    b = Pygen(b)
+                    A = A.augment(Pygen((a,b-d[1])).matrix())
                 return A
-            elif(b>d[1] and a==d[0]):
+            elif(b > d[1] and a == d[0]):
+                b = Pygen(b)
                 return self.augment(Pygen((d[0],b-d[1])).matrix())
             else:
                 return self
