@@ -204,9 +204,6 @@ def groebner_basis(gens, proba_epsilon=None, threads=None, prot=False,
 
         sage: P = PolynomialRing(QQ, 8, 'x')
         sage: I = sage.rings.ideal.Cyclic(P)
-        sage: time B = gb_giac(I.gens(),1e-6,threads=2) # doctest: +SKIP
-        ...
-        Time: CPU 168.98 s, Wall: 94.13 s
 
     You can get detailed information by setting ``prot=True``
 
