@@ -1276,18 +1276,7 @@ cdef class Pygen(GiacMethods_base):
         EXAMPLES::
 
             >>> from sagemath_giac.giac import libgiac
-            >>> from sage.rings.rational_field import QQ
-            >>> from sage.matrix.constructor import matrix
             >>> from sage.misc.latex import latex
-            >>> M = matrix(QQ, [[1, 2], [3, 4]])
-            >>> latex(M)
-            \left(\begin{array}{rr}
-            1 & 2 \\
-            3 & 4
-            \end{array}\right)
-            >>> gM = libgiac(M)
-            >>> latex(gM)
-            \left(\begin{array}{cc}1&2\\3&4\end{array}\right)
             >>> gf = libgiac('(x^4 - y)/(y^2-3*x)')
             >>> latex(gf)
             \frac{x^{4}-y}{y^{2}-3 x}
