@@ -29,11 +29,11 @@ print(sage.cpython.__file__.replace('__init__.py', ''))
 ).stdout().strip()
 cpython = declare_dependency(include_directories: inc_cpython)
 
-py.install_sources('__init__.py', 'giac.pxd', 'misc.h', subdir: 'sage/libs/giac')
+py.install_sources('context.py', 'gb.py', 'giac.pxd', 'misc.h', subdir: 'sagemath_giac')
 py.extension_module(
   'giac',
   sources: files('giac.pyx'),
-  subdir: 'sage/libs/giac',
+  subdir: 'sagemath_giac',
   install: true,
   override_options: ['cython_language=cpp'],
   dependencies: [cpython, cysignals, giac, gmpxx, py.dependency()],

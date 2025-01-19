@@ -26,7 +26,7 @@ in giac, but the mathematical computation  is not done. This class is mainly
 for cython users.  Here A is a Pygen element, and it is ready for any giac
 function.::
 
-    >>> from sage.libs.giac.giac import *
+    >>> from sagemath_giac.giac import *
     >>> A = Pygen('2+2')
     >>> A
     2+2
@@ -88,7 +88,7 @@ probabilistic algorithms or not...::
 
 TESTS::
 
-    >>> from sage.libs.giac.giac import libgiac
+    >>> from sagemath_giac.giac import libgiac
     >>> libgiac(3**100)
     515377520732011331036461129765621272702107522001
     >>> libgiac(-3**100)
@@ -188,7 +188,7 @@ def _giac(s):
 
     EXAMPLES::
 
-        >>> from sage.libs.giac.giac import libgiac
+        >>> from sagemath_giac.giac import libgiac
         >>> x,y = libgiac('x,y')
         >>> (x + y*2).cos().texpand()
         cos(x)*(2*cos(y)^2-1)-sin(x)*2*cos(y)*sin(y)
@@ -509,7 +509,7 @@ cdef class GiacSetting(Pygen):
 
     EXAMPLES::
 
-        >>> from sage.libs.giac.giac import giacsettings, libgiac
+        >>> from sagemath_giac.giac import giacsettings, libgiac
 
     ``threads`` (maximal number of allowed theads in giac)::
 
@@ -596,7 +596,7 @@ cdef class GiacSetting(Pygen):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import giacsettings, libgiac
+            >>> from sagemath_giac.giac import giacsettings, libgiac
             >>> giacsettings.digits = 20
             >>> giacsettings.digits
             20
@@ -638,7 +638,7 @@ cdef class GiacSetting(Pygen):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import libgiac, giacsettings
+            >>> from sagemath_giac.giac import libgiac, giacsettings
             >>> giacsettings.complexflag = False
             >>> giacsettings.complexflag
             False
@@ -667,7 +667,7 @@ cdef class GiacSetting(Pygen):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import giacsettings, libgiac
+            >>> from sagemath_giac.giac import giacsettings, libgiac
             >>> giacsettings.eval_level=1
             >>> libgiac("purge(a):;b:=a;a:=1;b")
             "Done",a,1,a
@@ -699,7 +699,7 @@ cdef class GiacSetting(Pygen):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import giacsettings,libgiac
+            >>> from sagemath_giac.giac import giacsettings,libgiac
             >>> giacsettings.proba_epsilon = 0
             >>> libgiac('proba_epsilon')
             0.0
@@ -723,7 +723,7 @@ cdef class GiacSetting(Pygen):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import giacsettings, libgiac
+            >>> from sagemath_giac.giac import giacsettings, libgiac
             >>> giacsettings.epsilon = 1e-10
             >>> P = libgiac('1e-11+x+5')
             >>> P == x+5
@@ -873,7 +873,7 @@ cdef class Pygen(GiacMethods_base):
         """
         TESTS::
 
-           >>> from sage.libs.giac.giac import libgiac
+           >>> from sagemath_giac.giac import libgiac
            >>> l=libgiac("seq[]"); len(l) # 29552 comment28
            0
 
@@ -896,7 +896,7 @@ cdef class Pygen(GiacMethods_base):
 
         TESTS::
 
-           >>> from sage.libs.giac.giac import libgiac
+           >>> from sagemath_giac.giac import libgiac
            >>> l = libgiac(list(range(10**6))); l[5]
            5
            >>> l[35:50:7]
@@ -917,7 +917,7 @@ cdef class Pygen(GiacMethods_base):
 
         Crash test::
 
-           >>> from sage.libs.giac.giac import Pygen
+           >>> from sagemath_giac.giac import Pygen
            >>> l = Pygen()
            >>> l[0]
            Traceback (most recent call last):
@@ -973,7 +973,7 @@ cdef class Pygen(GiacMethods_base):
 
         TESTS::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> from sage.rings.rational_field import QQ
             >>> A = libgiac([ [ libgiac(j)+libgiac(i)*2 for i in range(3)] for j in range(3)]); A
             [[0,2,4],[1,3,5],[2,4,6]]
@@ -1014,7 +1014,7 @@ cdef class Pygen(GiacMethods_base):
 
         TESTS::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> l = libgiac(range(10**6))
             >>> [ i for i in l ] == list(range(10**6))
             True
@@ -1104,7 +1104,7 @@ cdef class Pygen(GiacMethods_base):
         """
         TESTS::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> (libgiac.sqrt(5)*libgiac('x')).factor()
             sqrt(5)*x
             >>> (libgiac('x')*libgiac.sqrt(5)).factor()
@@ -1130,7 +1130,7 @@ cdef class Pygen(GiacMethods_base):
         """
         TESTS::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> (libgiac.sqrt(3)/libgiac('x')).factor()
             sqrt(3)/x
             >>> (libgiac('x')/libgiac.sqrt(3)).factor()
@@ -1209,7 +1209,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import *
+            >>> from sagemath_giac.giac import *
             >>> f = libgiac('(x+y+z+2)**10')
             >>> g = f.normal()
             >>> from tempfile import NamedTemporaryFile
@@ -1232,7 +1232,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> C = libgiac([[1,2]])
             >>> C.redim(2,3)
             [[1,2,0],[0,0,0]]
@@ -1275,7 +1275,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> from sage.rings.rational_field import QQ
             >>> from sage.matrix.constructor import matrix
             >>> from sage.misc.latex import latex
@@ -1305,7 +1305,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import *
+            >>> from sagemath_giac.giac import *
             >>> from sage.arith.misc import next_prime
             >>> from sage.rings.integer_ring import ZZ
             >>> from sage.rings.finite_rings.integer_mod import Mod
@@ -1359,7 +1359,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-           >>> from sage.libs.giac.giac import libgiac
+           >>> from sagemath_giac.giac import libgiac
            >>> from sage.rings.rational_field import QQ
            >>> a = libgiac('103993/33102')
            >>> b = QQ(a); b
@@ -1398,7 +1398,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> m = libgiac('x^2 + 5*y')
             >>> m.sage()
             x^2 + 5*y
@@ -1485,7 +1485,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> from sage.symbolic.ring import SR
             >>> from sage.functions.trig import sin
             >>> u, v = SR.var('u,v')
@@ -1538,7 +1538,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import *
+            >>> from sagemath_giac.giac import *
             >>> from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
             >>> from sage.rings.rational_field import QQ
             >>> from sage.matrix.constructor import matrix
@@ -1576,7 +1576,7 @@ cdef class Pygen(GiacMethods_base):
 
         EXAMPLES::
 
-            >>> from sage.libs.giac.giac import libgiac
+            >>> from sagemath_giac.giac import libgiac
             >>> from sage.rings.rational_field import QQ
             >>> from sage.modules.free_module_element import vector
             >>> v = libgiac(range(10))
@@ -1908,7 +1908,7 @@ class GiacFunction(Pygen):
 
     EXAMPLES::
 
-        >>> from sage.libs.giac.giac import libgiac
+        >>> from sagemath_giac.giac import libgiac
         >>> from sage.rings.imaginary_unit import I
         >>> from sage.functions.log import exp
         >>> from sage.symbolic.constants import pi
@@ -1936,7 +1936,7 @@ class GiacFunctionNoEV(Pygen):
 
     EXAMPLES::
 
-        >>> from sage.libs.giac.giac import libgiac
+        >>> from sagemath_giac.giac import libgiac
         >>> libgiac('a:=1')
         1
         >>> libgiac.purge('a')  # purge is a GiacFunctionNoEV
@@ -1991,7 +1991,7 @@ def loadgiacgen(str filename):
 
     EXAMPLES::
 
-        >>> from sage.libs.giac.giac import *
+        >>> from sagemath_giac.giac import *
         >>> g = libgiac.texpand('cos(10*a+5*b)')
         >>> from tempfile import NamedTemporaryFile
         >>> F = NamedTemporaryFile()   # choose a temporary file for a test
@@ -2015,7 +2015,7 @@ class GiacInstance:
 
     EXAMPLES::
 
-        >>> from sage.libs.giac.giac import libgiac, GiacInstance
+        >>> from sagemath_giac.giac import libgiac, GiacInstance
         >>> isinstance(libgiac, GiacInstance)
         True
         >>> libgiac.solve('2*exp(x)<(exp(x*2)-1),x')

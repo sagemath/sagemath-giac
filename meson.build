@@ -10,4 +10,4 @@ py_dep = py.dependency()
 # Compilers
 cxx = meson.get_compiler('cpp')
 
-subdir('src/sage/libs/giac')
+subdir('src/sagemath_giac')

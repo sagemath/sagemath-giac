@@ -13,7 +13,7 @@ EXAMPLES::
 
 Compute and verify a Groebner basis::
 
-    >>> from sage.libs.giac import groebner_basis as gb_giac
+    >>> from sagemath_giac.gb import groebner_basis as gb_giac
     >>> from sage.rings.ideal import Cyclic as CyclicIdeal
     >>> from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
     >>> from sage.rings.rational_field import QQ
@@ -39,82 +39,8 @@ Compute and verify a Groebner basis::
 
 from sage.structure.proof.all import polynomial as proof_polynomial
 from sage.rings.polynomial.multi_polynomial_sequence import PolynomialSequence
-from sage.libs.giac.giac import giacsettings, libgiac
-
-
-class GiacSettingsDefaultContext:
-    r"""
-    Context preserve libgiac settings.
-    """
-
-    def __enter__(self):
-        """
-        EXAMPLES::
-
-           >>> from sage.libs.giac import GiacSettingsDefaultContext
-           >>> from sage.libs.giac.giac import giacsettings
-           >>> giacsettings.proba_epsilon = 1e-16
-           >>> with GiacSettingsDefaultContext(): giacsettings.proba_epsilon = 1e-12
-           >>> giacsettings.proba_epsilon < 1e-14
-           True
-
-        """
-        self.proba_epsilon = giacsettings.proba_epsilon
-        self.threads = giacsettings.threads
-        # Change the debug level at the end to not have messages at each modification
-        self.debuginfolevel = libgiac('debug_infolevel()')
-
-    def __exit__(self, typ, value, tb):
-        """
-        EXAMPLES::
-
-           >>> from sage.libs.giac import GiacSettingsDefaultContext
-           >>> from sage.libs.giac.giac import giacsettings
-           >>> giacsettings.proba_epsilon = 1e-16
-           >>> with GiacSettingsDefaultContext(): giacsettings.proba_epsilon = 1e-30
-           >>> giacsettings.proba_epsilon < 1e-20
-           False
-        """
-        # Restore the debug level first to not have messages at each modification
-        libgiac('debug_infolevel')(self.debuginfolevel)
-        # NB: giacsettings.epsilon has a different meaning that giacsettings.proba_epsilon.
-        giacsettings.proba_epsilon = self.proba_epsilon
-        giacsettings.threads = self.threads
-
-
-def local_giacsettings(func):
-    """
-    Decorator to preserve Giac's proba_epsilon and threads settings.
-
-    EXAMPLES::
-
-        >>> def testf(a, b):
-        ...     giacsettings.proba_epsilon = a/100
-        ...     giacsettings.threads = b+2
-        ...     return (giacsettings.proba_epsilon, giacsettings.threads)
-
-        >>> from sage.libs.giac.giac import giacsettings
-        >>> from sage.libs.giac import local_giacsettings
-        >>> gporig, gtorig = (giacsettings.proba_epsilon,giacsettings.threads)
-        >>> gp, gt = local_giacsettings(testf)(giacsettings.proba_epsilon,giacsettings.threads)
-        >>> gporig == giacsettings.proba_epsilon
-        True
-        >>> gtorig == giacsettings.threads
-        True
-        >>> gp<gporig, gt-gtorig
-        (True, 2)
-    """
-    from sage.misc.decorators import sage_wraps
-
-    @sage_wraps(func)
-    def wrapper(*args, **kwds):
-        """
-        Execute function in ``GiacSettingsDefaultContext``.
-        """
-        with GiacSettingsDefaultContext():
-            return func(*args, **kwds)
-
-    return wrapper
+from sagemath_giac.context import local_giacsettings
+from sagemath_giac.giac import giacsettings, libgiac
 
 
 @local_giacsettings
@@ -165,7 +91,7 @@ def groebner_basis(gens, proba_epsilon=None, threads=None, prot=False,
     EXAMPLES::
 
         >>> from sage.arith.misc import previous_prime
-        >>> from sage.libs.giac import groebner_basis as gb_giac
+        >>> from sagemath_giac.gb import groebner_basis as gb_giac
         >>> from sage.rings.finite_rings.finite_field_constructor import GF
         >>> from sage.rings.ideal import Cyclic as CyclicIdeal
         >>> from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
@@ -179,7 +105,7 @@ def groebner_basis(gens, proba_epsilon=None, threads=None, prot=False,
 
     Elimination ideals can be computed by passing ``elim_variables``::
 
-        >>> from sage.libs.giac import groebner_basis as gb_giac
+        >>> from sagemath_giac.gb import groebner_basis as gb_giac
         >>> P = PolynomialRing(GF(previous_prime(2**31)), 5, 'x')
         >>> I = CyclicIdeal(P)
         >>> B = gb_giac(I.gens(), elim_variables=[P.gen(0), P.gen(2)])
@@ -216,7 +142,7 @@ def groebner_basis(gens, proba_epsilon=None, threads=None, prot=False,
 
     TESTS::
 
-        >>> from sage.libs.giac.giac import libgiac
+        >>> from sagemath_giac.giac import libgiac
         >>> libgiac("x2:=22; x4:='whywouldyoudothis'")
         22,whywouldyoudothis
         >>> gb_giac(I)
