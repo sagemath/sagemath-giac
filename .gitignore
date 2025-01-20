@@ -1,2 +1,12 @@
+# Created by python itself (when e.g. running doctests)
 src/sagemath_giac/__pycache__/
 tools/__pycache__/
+
+# Created by pip wheel, as suggested in the README
+sagemath_giac-*.whl
+
+# Created by "python -m build", as suggested in the README
+dist/
+
+# Created by "meson setup build", as suggested in the README
+build/
