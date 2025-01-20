@@ -30,3 +30,6 @@ Documentation = "https://github.com/sagemath/sagemath-giac/blob/master/README.rs
 Repository = "https://github.com/sagemath/sagemath-giac.git"
 Issues = "https://github.com/sagemath/sagemath-giac/issues"
 Changelog = "https://github.com/sagemath/sagemath-giac/raw/master/NEWS"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules --doctest-glob='*.pyx' --doctest-glob='*.rst'"
