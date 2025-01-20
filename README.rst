@@ -94,6 +94,14 @@ module. We have redirected stderr to ``/dev/null`` because, otherwise,
 a mountain of debug output is printed to the console. A small amount
 is still printed to stdout, but that is most likely a bug in libgiac.
 
+If you have pytest installed, it can also be used::
+
+    $ PYTHONPATH=src:build/src pytest
+
+Finally, meson is capable of running pytest on your behalf::
+
+    $ PYTHONPATH=src:build/src meson test -C build
+
 Installation
 ============
 
