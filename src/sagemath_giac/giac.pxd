@@ -9,7 +9,7 @@
 #                  https://www.gnu.org/licenses/
 #*****************************************************************************
 
-from sage.libs.gmp.mpz cimport mpz_t, mpz_set
+from gmpy2.gmpy2 cimport mpz_t, mpz_set
 from libcpp.string cimport string
 
 cdef extern from "giac/giac.h" namespace "giac":

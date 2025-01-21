@@ -127,15 +127,13 @@ GETTING HELP:
 #*****************************************************************************
 
 from cysignals.signals cimport *
+from gmpy2 cimport import_gmpy2, mpz_set
 from sys import maxsize as Pymaxint, version_info as Pyversioninfo
 import os
 import math
 
 # sage includes
 from sage.ext.stdsage cimport PY_NEW
-
-from sage.libs.gmp.mpz cimport mpz_set
-
 from sage.rings.integer_ring import ZZ
 from sage.rings.rational_field import QQ
 from sage.rings.finite_rings.integer_mod_ring import IntegerModRing
@@ -149,6 +147,10 @@ from sage.symbolic.ring import SR
 from sage.symbolic.expression import Expression
 from sage.symbolic.expression_conversions import InterfaceInit
 from sage.interfaces.giac import giac
+
+
+# initialize the gmpy2 C-API
+import_gmpy2()
 
 
 # Python3 compatibility ############################

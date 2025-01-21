@@ -1,5 +1,11 @@
 [build-system]
-requires = ["cython", "cysignals", "meson-python", "sagemath-standard"]
+requires = [
+  "cython",
+  "cysignals",
+  "gmpy2",
+  "meson-python",
+  "sagemath-standard"
+]
 build-backend = "mesonpy"
 
 [project]
