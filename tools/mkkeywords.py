@@ -6,7 +6,7 @@ in sagemath-giac. It creates files ``auto-methods.pxi``,
 - the ``cas_help`` program from a giac installation
 - the ``aide_cas.txt`` file that you can build yourself like this::
 
-    grep -E '^#' share/giac/doc/aide_cas | sed -e 's/^# //' > aide_cas.txt
+    $ grep '^# ' /path/to/giac/docs/aide_cas | cut -d' ' -f2 > aide_cas.txt
 
 It should not be used on-the-fly (e.g. in an installation script),
 because auto-methods.pxi takes quite a long time to build, and because
@@ -48,9 +48,9 @@ if __name__ == "__main__":
         mostkeywords = f.read().split()
 
     missing = set(mostkeywordorig).difference(mostkeywords)
-    print("Missing",missing)
+    print("Missing keywords: ", missing)
     newkeywords = (set(mostkeywords).difference(mostkeywordorig)).difference(toremove+blacklist)
-    print("\nNew Keywords found:", newkeywords)
+    print("\nNew keywords:", newkeywords)
 
     #undocumented keywords
     #undocumented=['posubLMQ','poslbdLMQ','VAS_positive','VAS']
@@ -84,12 +84,17 @@ if __name__ == "__main__":
                   universal_newlines=True)
         doc = p.communicate()[0]
 
-        doc = doc.replace("\n", "\n        ")  # Indent doc
-        s = "     def " + i + "(self,*args):\n"
-        s += "        r'''From Giac's documentation:\n        "
-        s += doc + "\n"
-        s += "        '''\n"
-        s += "        return GiacMethods['" + i + "'](self,*args)\n\n"
+        # The Giac docs include as their first line, "Help for Foo:"
+        # which is a bit redundant.
+        doc = doc.replace(f"Help for {i}:", "")
+        doc = "\n        ".join(doc.splitlines())  # indent each line
+
+        s =   "    def " + i + "(self,*args):\n"
+        s +=  "        r'''\n"
+        s +=  "        From Giac's documentation:\n"
+        s += f"        {doc}\n"
+        s +=  "        '''\n"
+        s += f"        return GiacMethods['{i}'](self,*args)\n\n"
         Mi.write(s)
 
     Mi.close()
