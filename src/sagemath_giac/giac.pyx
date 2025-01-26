@@ -368,10 +368,8 @@ def _giac(s):
         >>> (libgiac.sin(x*3)*2 + 1).solve(x).simplify()
         list[-pi/18,7*pi/18]
 
-        >>> libgiac.solve('sin(3*x)>2*sin(x)',x)
-        Traceback (most recent call last):
-        ...
-        RuntimeError: Unable to find numeric values solving equation. For trigonometric equations this may be solved using assumptions, e.g. assume(x>-pi && x<pi) Error: Bad Argument Value
+        >>> libgiac.solve('x^3-x>x',x)
+        list[((x>(-sqrt(2))) and (x<0)),x>(sqrt(2))]
 
     You can also add some hypothesis to a giac symbol::
 
