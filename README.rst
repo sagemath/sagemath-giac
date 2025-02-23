@@ -61,7 +61,7 @@ python looks for packages installed with ``pip install --user``.
 
 Of course, it is also possible to build a wheel the usual way, using::
 
-    $ pip wheel --no-build-isolation --verbose .
+    $ python -m pip wheel --no-build-isolation --verbose .
 
 or::
 
