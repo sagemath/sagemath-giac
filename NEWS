@@ -1,3 +1,10 @@
+sagemath-giac-0.1.1 (2025-02-23)
+
+  * Use the c++11 standard instead of c++17 to build. This fixes
+    a build failure on macOS (and is correct anyway).
+
+  * Better support for building against sage in a venv.
+
 sagemath-giac-0.1.0 (2025-02-19)
 
   * Initial release. With a few tweaks, this is the sage.libs.giac
