@@ -65,16 +65,16 @@ Of course, it is also possible to build a wheel the usual way, using::
 
 or::
 
-    $ python -m build --no-isolation .
-
-If you installed SageMath using meson, the last method will only
-work if you bypass the dependency check::
-
     $ python -m build --no-isolation --skip-dependency-check .
 
-Otherwise, it will complain about a missing dependency on the
-sagemath-standard distribution. (This is because ``meson install``
-installs only the library and not the python packaging metadata.)
+Skipping the dependency check is necessary if you installed SageMath
+using meson, because ``meson install`` installs only the library and
+not the python packaging metadata. It is recommended to skip the
+dependency check in any case, opting instead to ensure that SageMath
+and all of its dependencies are installed (systemwide or in the active
+venv) beforehand. Otherwise there is a risk that the build system will
+try to download and isolate a new set of build dependencies, which
+involves building all of SageMath again.
 
 Testing
 =======
