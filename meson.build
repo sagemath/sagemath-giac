@@ -2,12 +2,15 @@ project('sagemath-giac', 'cpp', 'cython',
   default_options: ['warning_level=3', 'cpp_std=c++11']
 )
 
-# Python
+## Python
 py_module = import('python')
-py = py_module.find_installation(pure: false)
+
+# Ask explicitly for 'python' so we get the venv python and
+# not the one used to run meson.
+py = py_module.find_installation('python', pure: false)
 py_dep = py.dependency()
 
-# Compilers
+## Compilers
 cxx = meson.get_compiler('cpp')
 
 subdir('src/sagemath_giac')
