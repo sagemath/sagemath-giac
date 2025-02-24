@@ -10,7 +10,7 @@ build-backend = "mesonpy"
 
 [project]
 name = "sagemath-giac"
-version = "0.1.0"
+version = "0.1.1"
 description = "Support for using Giac within SageMath"
 readme = "README.rst"
 requires-python = ">=3.9"
