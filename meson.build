@@ -1,5 +1,6 @@
 project('sagemath-giac', 'cpp', 'cython',
-  default_options: ['warning_level=3', 'cpp_std=c++11']
+  default_options: ['warning_level=3', 'cpp_std=c++11'],
+  meson_version: '>=1.2.0'
 )
 
 ## Python
