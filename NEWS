@@ -1,3 +1,7 @@
+sagemath-giac-0.1.2 (2025-05-06)
+
+  * Build system support for --editable SageMath installations.
+
 sagemath-giac-0.1.1 (2025-02-23)
 
   * Use the c++11 standard instead of c++17 to build. This fixes
