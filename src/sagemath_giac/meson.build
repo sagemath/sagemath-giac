@@ -44,7 +44,7 @@ cpython = declare_dependency(include_directories: inc_cpython)
 
 # Cython gets its path (for pxd files) from python's sys.path, but
 # when the system cython is used from within a venv, the shebang on
-# e.g.  /use/bin/cython can break out of the venv. Here we run
+# e.g. /usr/bin/cython can break out of the venv. Here we run
 # "python" from the venv and dump its sys.path as --include-dir
 # arguments we can pass to cython. Note: meson automatically quotes
 # compiler args with spaces in them, so you shouldn't try to quote the
