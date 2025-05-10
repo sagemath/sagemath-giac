@@ -65,6 +65,11 @@ cpython = declare_dependency(include_directories: inc_cpython)
 # ours that could reasonably be installed --editable, so I don't feel
 # too bad about this.
 #
+# In addition, we explicitly add each element of sys.path to the
+# include path. This would normally be the case, and it is required in
+# the one scenario where the "import sage" trick fails, namely when
+# the sage library is installed without __init__.py.
+#
 # Note: meson automatically quotes compiler args with spaces in them,
 # so you shouldn't try to quote the paths here. Instead we split the
 # --include-dir and path arguments into separate elements so that
@@ -74,9 +79,15 @@ cython_include_args = run_command(
   [
     '-c',
     '''
+import sys
+for p in sys.path:
+    if p:
+        print("--include-dir")
+        print(p)
+
 import sage
-from pathlib import Path
 if sage.__file__:
+    from pathlib import Path
     print("--include-dir")
     print(Path(sage.__file__).parent.parent)
     '''.strip()
