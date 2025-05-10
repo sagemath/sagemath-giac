@@ -76,8 +76,9 @@ cython_include_args = run_command(
     '''
 import sage
 from pathlib import Path
-print("--include-dir")
-print(Path(sage.__file__).parent.parent)
+if sage.__file__:
+    print("--include-dir")
+    print(Path(sage.__file__).parent.parent)
     '''.strip()
   ],
   check: true
