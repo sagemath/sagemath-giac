@@ -6,7 +6,7 @@ Introduction
 Giac is a full-featured, open source mathematics library written by
 Bernard Parisse:
 
-* https://www-fourier.ujf-grenoble.fr/~parisse/giac.html
+* https://www-fourier.univ-grenoble-alpes.fr/~parisse/giac.html
 
 For many years, SageMath has included an interface to Giac based on
 the GiacPy python interface by Frederic Han:
